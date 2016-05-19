@@ -73,10 +73,10 @@ func (this *contentExtractor) getTitle(article *Article) string {
 		usedDelimiter = true
 	}
 
-	if !usedDelimiter && strings.Contains(titleText, ":") {
-		titleText = this.splitTitle(RegSplit(titleText, COLON_SPLITTER))
-		usedDelimiter = true
-	}
+//	if !usedDelimiter && strings.Contains(titleText, ":") {
+//		titleText = this.splitTitle(RegSplit(titleText, COLON_SPLITTER))
+//		usedDelimiter = true
+//	}
 
 	title = strings.Replace(titleText, MOTLEY_REPLACEMENT, "", -1)
 
@@ -206,7 +206,18 @@ func (this *contentExtractor) getMetaContents(article *Article, metaNames *set.S
 
 //if the article has meta description set in the source, use that
 func (this *contentExtractor) getMetaDescription(article *Article) string {
-	return this.getMetaContent(article, "description")
+	description := ""
+	doc := article.Doc
+
+	ogdescriptionElement := doc.Find(`meta[property="og:description"]`)
+	if ogdescriptionElement != nil && ogdescriptionElement.Size() > 0 {
+		description, _ = ogdescriptionElement.Attr("content")
+		if description != "" {
+			return description
+		}
+	}
+//	return this.getMetaContent(article, "description")
+    return this.getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
 }
 
 //if the article has meta keywords set in the source, use that

@@ -16,6 +16,7 @@ type Crawler struct {
 	url     string
 	rawHtml string
 	helper  Helper
+    contentType string
 }
 
 func NewCrawler(config configuration, url string, rawHtml string) Crawler {
@@ -87,11 +88,13 @@ func (this Crawler) Crawl() *Article {
 		article.MetaLang = extractor.getMetaLanguage(article)
 		article.MetaFavicon = extractor.getFavicon(article)
 
-		article.MetaDescription = extractor.getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
+		article.MetaDescription = extractor.getMetaDescription(article)
+//            getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
 		article.MetaKeywords = extractor.getMetaContentWithSelector(article, "meta[name#=(?i)^keywords$]")
 		article.CanonicalLink = extractor.getCanonicalLink(article)
 		article.Domain = extractor.getDomain(article)
 		article.Tags = extractor.getTags(article)
+        article.ContentType = this.contentType
 
 		cleaner := NewCleaner(this.config)
 		article.Doc = cleaner.clean(article)
@@ -144,6 +147,7 @@ func (this *Crawler) assignHtml() {
 				defer resp.Body.Close()
 				contents, err := ioutil.ReadAll(resp.Body)
 				if err == nil {
+                    this.contentType = http.DetectContentType(contents)
 					this.rawHtml = string(contents)
 				} else {
 					log.Println(err.Error())

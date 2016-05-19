@@ -26,6 +26,7 @@ type Article struct {
 	PublishDate    string
 	AdditionalData map[string]string
 	Delta          int64
+    ContentType    string
 }
 
 //Simple ToString: it shows just the title
