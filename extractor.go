@@ -27,6 +27,8 @@ var SPACE_SPLITTER = regexp.MustCompile(" ")
 var A_REL_TAG_SELECTOR = "a[rel=tag]"
 var A_HREF_TAG_SELECTOR = [...]string{"/tag/", "/tags/", "/topic/", "?keyword"}
 var RE_LANG = "^[A-Za-z]{2}$"
+var META_ITEMPROP_SELECTOR = "meta[itemprop]"
+var META_OPENGRAPH_SELECTOR = "meta[property#=(?i)^og:]"
 
 type contentExtractor struct {
 	config configuration
@@ -206,16 +208,14 @@ func (this *contentExtractor) getMetaContents(article *Article, metaNames *set.S
 
 //if the article has meta description set in the source, use that
 func (this *contentExtractor) getMetaDescription(article *Article) string {
-	description := ""
-	doc := article.Doc
+    if itempropDescription, ok := article.ItemProps["description"]; ok {
+        return itempropDescription
+    }
 
-	ogdescriptionElement := doc.Find(`meta[property="og:description"]`)
-	if ogdescriptionElement != nil && ogdescriptionElement.Size() > 0 {
-		description, _ = ogdescriptionElement.Attr("content")
-		if description != "" {
-			return description
-		}
-	}
+    if opengraphDescription, ok := article.OpenGraph["og:description"]; ok {
+        return opengraphDescription
+    }
+
 	return this.getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
 }
 
@@ -259,6 +259,34 @@ func (this *contentExtractor) getDomain(article *Article) string {
 	}
 	return ""
 }
+
+//if the article has OpenGraph `og:` meta tags set in the source, use those
+func (this *contentExtractor) getOpenGraph(article *Article) map[string]string {
+    opengraphs := make(map[string]string)
+	doc := article.Doc
+	selections := doc.Find(META_OPENGRAPH_SELECTOR)
+	selections.Each(func(i int, s *goquery.Selection) {
+        opengraph, _ := s.Attr("property")
+        value, _ := s.Attr("content")
+        opengraphs[opengraph] = value
+	})
+    return opengraphs
+}
+
+
+//if the article has `itemprop` meta tags set in the source, use those
+func (this *contentExtractor) getItemProps(article *Article) map[string]string {
+    itemprops := make(map[string]string)
+	doc := article.Doc
+	selections := doc.Find(META_ITEMPROP_SELECTOR)
+	selections.Each(func(i int, s *goquery.Selection) {
+        itemprop, _ := s.Attr("itemprop")
+        value, _ := s.Attr("content")
+        itemprops[itemprop] = value
+	})
+    return itemprops
+}
+
 
 //if the article has tags set in the source, use that
 func (this *contentExtractor) getTags(article *Article) *set.Set {

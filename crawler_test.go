@@ -47,6 +47,24 @@ func ValidateArticle(a Article) error {
 	return nil
 }
 
+func Test_SoleReviewParse(t *testing.T) {
+	article := Article{
+		Domain:          "solereview.com",
+		Title:           "What does it cost to make a running shoe?",
+        MetaDescription: "Solereview goes where no one has gone before. Sneaker economics 101.",
+		CleanedText:     "HomeGuides\n\nWhat does it cost to make a running shoe?\n\nsolereview\n\nGuides",
+		MetaKeywords:    "",
+        CanonicalLink:   "//www.solereview.com/what-does-it-cost-to-make-a-running-shoe/",
+        TopImage:        "http://www.solereview.com/wp-content/uploads/2016/05/Cost_split_Nike_shoe.jpg",
+	}
+
+	err := ValidateArticle(article)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+
 func Test_GloboEsporteParse(t *testing.T) {
 	article := Article{
 		Domain:          "globoesporte.globo.com",
