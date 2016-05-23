@@ -216,8 +216,7 @@ func (this *contentExtractor) getMetaDescription(article *Article) string {
 			return description
 		}
 	}
-//	return this.getMetaContent(article, "description")
-    return this.getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
+	return this.getMetaContentWithSelector(article, "meta[name#=(?i)^description$]")
 }
 
 //if the article has meta keywords set in the source, use that
