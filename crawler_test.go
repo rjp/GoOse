@@ -51,7 +51,7 @@ func Test_GloboEsporteParse(t *testing.T) {
 	article := Article{
 		Domain:          "globoesporte.globo.com",
 		Title:           "Rodrigo Caio treina até nas férias e tenta acelerar retorno aos gramados",
-		MetaDescription: "Rodrigo Caio treina na esteira durante as férias em Dracena-SP (Foto: Divulgação)Rodrigo Caio quer ganhar tempo na recuperação da lesão que sofreu no joelho esquerdo. Apesar de ter sido liberado pelo departamento médico do São Paulo para as férias, o ...",
+        MetaDescription: "Jogador segue programação de exercícios em Dracena, interior de São Paulo. Comissão técnica planeja volta dele para o fim de fevereiro ou início de março ",
 		CleanedText:     "Comissão técnica planeja volta dele para o fim de fevereiro ou início de março",
 		MetaKeywords:    "notícias, notícia, presidente prudente região",
 		CanonicalLink:   "http://globoesporte.globo.com/sp/presidente-prudente-regiao/noticia/2014/12/rodrigo-caio-treina-ate-nas-ferias-e-tenta-acelerar-retorno-aos-gramados.html",
@@ -68,7 +68,7 @@ func Test_EditionCnnParse(t *testing.T) {
 	article := Article{
 		Domain:          "edition.cnn.com",
 		Title:           "What if you could make anything you wanted?",
-		MetaDescription: "Massimo Banzi's pocket-sized open-source circuit board has become a key building block in the creation of a huge variety of innovative devices.",
+        MetaDescription: "Massimo Banzi's pocket-sized open-source circuit board has become a key building block in the creation of a huge variety of innovative devices.\n",
 		CleanedText:     "In the 20th century, getting your child a toy car meant a trip to a shopping mall.",
 		MetaKeywords:    "",
 		CanonicalLink:   "http://www.cnn.com/2012/07/08/opinion/banzi-ted-open-source/index.html",
