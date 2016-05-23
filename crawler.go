@@ -88,6 +88,10 @@ func (this Crawler) Crawl() *Article {
 		article.MetaLang = extractor.getMetaLanguage(article)
 		article.MetaFavicon = extractor.getFavicon(article)
 
+        // We can use the `itemprop` or `og:*` for later items
+        article.ItemProps = extractor.getItemProps(article)
+        article.OpenGraph = extractor.getOpenGraph(article)
+
 		article.MetaDescription = extractor.getMetaDescription(article)
 		article.MetaKeywords = extractor.getMetaContentWithSelector(article, "meta[name#=(?i)^keywords$]")
 		article.CanonicalLink = extractor.getCanonicalLink(article)

@@ -27,6 +27,8 @@ type Article struct {
 	AdditionalData map[string]string
 	Delta          int64
 	ContentType    string
+    ItemProps      map[string]string
+    OpenGraph      map[string]string
 }
 
 //Simple ToString: it shows just the title
